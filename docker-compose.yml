@@ -19,26 +19,27 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+      - "5555:5555"
     volumes:
       - ./backend:/app
       - /app/node_modules
     environment:
       - DATABASE_URL=postgresql://moha:adnan@db:5432/matcha
       - NODE_ENV=development
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
     command: sh -c "npm install -g nodemon && npm install && nodemon src/main.js -L"
 
-  # db:
-  #   image: postgres:15-alpine
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   environment:
-  #     - POSTGRES_USER=moha
-  #     - POSTGRES_PASSWORD=adnan
-  #     - POSTGRES_DB=matcha
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=moha
+      - POSTGRES_PASSWORD=adnan
+      - POSTGRES_DB=matcha
 
 volumes:
   postgres_data:
