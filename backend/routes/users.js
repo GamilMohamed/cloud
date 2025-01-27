@@ -13,8 +13,12 @@ router.get('/', function (req, res, next) {
   res.json({ message: 'hello world' });
 });
 
+router.get('/moha', function (req, res, next) {
+  res.json({ message: 'hello moha' });
+});
+
 router.get('/adnan', function (req, res, next) {
-  res.send('omg adnan');
+  res.json({ message: 'hello adnan' });
 });
 
 router.get('/m', function (req, res, next) {
