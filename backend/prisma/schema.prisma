@@ -8,6 +8,28 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
+  id    String  @id @default(cuid())
+  name  String
+  Cloud Cloud[]
+  Guess Guess[]
+}
+
+model Cloud {
+  id      String  @id @default(cuid())
+  answer  String
+  image   String
+  filter  String
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String
+  guesses Guess[]
+}
+
+model Guess {
+  id      String  @id @default(cuid())
+  answer  String
+  filter  String?
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String
+  cloud   Cloud   @relation(fields: [cloudId], references: [id])
+  cloudId String
 }
