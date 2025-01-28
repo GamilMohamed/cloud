@@ -1,12 +1,15 @@
+//auth.route.ts
 import { auth } from "../config/auth.config"
 import { Router } from 'express';
 
 const AuthRouter = Router();
 
-AuthRouter.use("/*", auth)
+// Route de base pour vérifier que l'auth fonctionne
+AuthRouter.get("/check", (req, res) => {
+  res.json({ message: "Auth route working" });
+});
 
-// AuthRouter.get('/', function (req, res, next) {
-// 	  res.json({ message: 'hello world' });
-// });
+// Middleware auth pour toutes les routes auth
+AuthRouter.use("/*", auth);
 
 export default AuthRouter;
