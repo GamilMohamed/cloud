@@ -8,10 +8,19 @@ generator client {
 }
 
 model User {
-  id    String  @id @default(cuid())
-  name  String
-  Cloud Cloud[]
-  Guess Guess[]
+  id             String   @id @default(cuid())
+  email          String
+  username       String
+  firstName      String
+  lastName       String
+  password       String
+  profilePicture String
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  Cloud          Cloud[]
+  Guess          Guess[]
 }
 
 model Cloud {
