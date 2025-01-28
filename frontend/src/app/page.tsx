@@ -1,9 +1,5 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Upload } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from 'next/link'
  
@@ -37,6 +33,11 @@ export default function Home() {
       }
     }
     fetchClouds();
+
+
+
+
+
   }, [name]);
 
   return (
