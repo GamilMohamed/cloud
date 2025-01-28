@@ -82,14 +82,16 @@ export default function ImageCropper() {
 				fillColor: '#fff'
 			})
 			setCroppedImage(croppedCanvas.toDataURL())
+			handleDownload(croppedCanvas.toDataURL())
+			//
 		}
 	}
 
-	const handleDownload = () => {
-		if (croppedImage) {
+	const handleDownload = (url: string) => {
+		if (url) {
 			const link = document.createElement('a')
 			link.download = 'cropped-image.png'
-			link.href = croppedImage
+			link.href = url
 			link.click()
 		}
 	}
