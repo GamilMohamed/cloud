@@ -1,17 +1,12 @@
-import { ExpressAuth } from "@auth/express"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import Google from "@auth/express/providers/google"
-import express from "express"
-import { prisma } from "../prisma"
-const app = express()
- 
-// If your app is served through a proxy
-// trust the proxy to allow us to read the `X-Forwarded-*` headers
-app.set("trust proxy", true)
-app.use(
-    "/auth/*",
-    ExpressAuth({
-      providers: [Google],
-      adapter: PrismaAdapter (prisma),
-    })
-  )
+import { auth } from "../config/auth.config"
+import { Router } from 'express';
+
+const AuthRouter = Router();
+
+AuthRouter.use("/*", auth)
+
+// AuthRouter.get('/', function (req, res, next) {
+// 	  res.json({ message: 'hello world' });
+// });
+
+export default AuthRouter;
