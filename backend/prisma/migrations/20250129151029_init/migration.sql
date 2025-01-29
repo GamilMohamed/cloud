@@ -1,21 +1,3 @@
-/*
-  Warnings:
-
-  - A unique constraint covering the columns `[email]` on the table `User` will be added. If there are existing duplicate values, this will fail.
-
-*/
--- DropForeignKey
-ALTER TABLE "Cloud" DROP CONSTRAINT "Cloud_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Guess" DROP CONSTRAINT "Guess_userId_fkey";
-
--- AlterTable
-ALTER TABLE "User" ADD COLUMN     "email" TEXT,
-ADD COLUMN     "emailVerified" TIMESTAMP(3),
-ADD COLUMN     "image" TEXT,
-ALTER COLUMN "name" DROP NOT NULL;
-
 -- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL,
@@ -45,10 +27,43 @@ CREATE TABLE "Session" (
 );
 
 -- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "name" TEXT,
+    "email" TEXT,
+    "emailVerified" TIMESTAMP(3),
+    "image" TEXT,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "VerificationToken" (
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Cloud" (
+    "id" TEXT NOT NULL,
+    "answer" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+    "filter" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "Cloud_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Guess" (
+    "id" TEXT NOT NULL,
+    "answer" TEXT NOT NULL,
+    "filter" TEXT,
+    "userId" TEXT NOT NULL,
+    "cloudId" TEXT NOT NULL,
+
+    CONSTRAINT "Guess_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -58,16 +73,19 @@ CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provi
 CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Guess" ADD CONSTRAINT "Guess_cloudId_fkey" FOREIGN KEY ("cloudId") REFERENCES "Cloud"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
