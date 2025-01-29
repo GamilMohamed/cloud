@@ -2,32 +2,74 @@
 import React, { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import Link from "next/link"
-
 const CloudAnimation = () => {
 	const cloudContainerRef = useRef<HTMLDivElement>(null)
-	const mainCloudRef = useRef<HTMLDivElement>(null)
 	const textRef = useRef<HTMLHeadingElement>(null)
 	const bigRef = useRef<HTMLDivElement>(null)
 
 	const randomNumber = (min: number, max: number) => Math.random() * (max - min) + min
 
 	// Cloud data: [src, width, height, top, duration]
-	const cloudsData = [["/cloudpixel.png", "190px", "auto", "10%", randomNumber(4, 25)], ["/cloudpixel2.png", "390px", "auto", "20%", randomNumber(4, 25)], ["/cloudpixel.png", "190px", "auto", "30%", randomNumber(4, 25)], ["/cloudpixel.png", "190px", "auto", "40%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "190px", "50%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "190px", "60%", randomNumber(4, 25)], ["/cloudpixel.png", "290px", "auto", "70%", randomNumber(4, 25)], ["/cloudpixel.png", "290px", "auto", "110%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "290px", "120%", randomNumber(4, 25)], ["/cloudpixel.png", "390px", "auto", "130%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "390px", "140%", randomNumber(4, 25)], ["/cloudpixel.png", "390px", "auto", "150%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "490px", "200%", randomNumber(4, 25)], ["/cloudpixel.png", "590px", "auto", "210%", randomNumber(4, 25)], ["/cloudpixel.png", "490px", "auto", "190%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "590px", "220%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "590px", "240%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "390px", "160%", randomNumber(4, 25)], ["/cloudpixel.png", "490px", "auto", "170%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "490px", "180%", randomNumber(4, 25)], ["/cloudpixel.png", "690px", "auto", "250%", randomNumber(4, 25)], ["/cloudpixel.png", "590px", "auto", "230%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "190px", "80%", randomNumber(4, 25)], ["/cloudpixel.png", "190px", "auto", "90%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "290px", "100%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "690px", "260%", randomNumber(4, 25)], ["/cloudpixel.png", "690px", "auto", "270%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "690px", "280%", randomNumber(4, 25)], ["/cloudpixel.png", "790px", "auto", "290%", randomNumber(4, 25)], ["/cloudpixel2.png", "auto", "790px", "300%", randomNumber(4, 25)],
-	];
+	// const cloudsData = [["
+	const cloudsData = [
+		['/cloudpixel.png', '190px', 'auto', '10%', 8, "-400px"],
+		['/cloudpixel2.png', '390px', 'auto', '20%', 20, "-400px"],
+		['/cloudpixel.png', '190px', 'auto', '30%', 24, "-400px"],
+		['/cloudpixel.png', '190px', 'auto', '40%', 23, "-400px"],
+		['/cloudpixel2.png', 'auto', '190px', '50%', 5, "-400px"],
+		['/cloudpixel2.png', 'auto', '190px', '60%', 6, "-400px"],
+		['/cloudpixel.png', '290px', 'auto', '70%', 9, "-400px"],
+		['/cloudpixel.png', '290px', 'auto', '80%', 8, "-400px"],
+		['/cloudpixel2.png', 'auto', '190px', '80%', 4, "-400px"],
+		['/cloudpixel.png', '190px', 'auto', '90%', 13, "-400px"],
+		['/cloudpixel2.png', 'auto', '290px', '100%', 12, "-400px"],
+
+
+		['/cloudpixel.png', '190px', 'auto', '10%', 24, "-400px"],
+		['/cloudpixel2.png', '390px', 'auto', '20%', 18, "-400px"],
+		['/cloudpixel.png', '190px', 'auto', '30%', 19, "-400px"],
+		['/cloudpixel2.png', '190px', 'auto', '40%', 19, "-400px"],
+		['/cloudpixel.png', 'auto', '190px', '50%', 16, "-400px"],
+		['/cloudpixel2.png', 'auto', '190px', '60%', 22, "-400px"],
+		['/cloudpixel.png', '290px', 'auto', '70%', 10, "-400px"],
+		['/cloudpixel2.png', '290px', 'auto', '80%', 21, "-400px"],
+		['/cloudpixel.png', 'auto', '190px', '80%', 13, "-400px"],
+		['/cloudpixel2.png', '190px', 'auto', '90%', 5, "-400px"],
+		['/cloudpixel.png', 'auto', '290px', '100%', 15, "-400px"],
+
+		['/cloudpixel2.png', '190px', 'auto', '10%', 9, "120vw"],
+		['/cloudpixel.png', '390px', 'auto', '20%', 15, "120vw"],
+		['/cloudpixel2.png', '190px', 'auto', '30%', 12, "120vw"],
+		['/cloudpixel.png', '190px', 'auto', '40%', 24, "120vw"],
+		['/cloudpixel2.png', 'auto', '190px', '50%', 14, "120vw"],
+		['/cloudpixel.png', 'auto', '190px', '60%', 5, "120vw"],
+		['/cloudpixel2.png', '290px', 'auto', '70%', 16, "120vw"],
+		['/cloudpixel.png', '290px', 'auto', '80%', 16, "120vw"],
+		['/cloudpixel2.png', 'auto', '190px', '80%', 10, "120vw"],
+
+
+
+	]
+	console.log("SA",cloudsData)
 	const mainCloud = ["/cloudpixel.png", "400px", "auto", "auto", 10]
 
 	useEffect(() => {
-		// if (!cloudContainerRef.current || !textRef.current || !mainCloudRef.current) return
+		if (!cloudContainerRef.current) return
 
 		const clouds = cloudContainerRef.current.querySelectorAll<HTMLImageElement>(".cloud")
 		const text = textRef.current
 
 		clouds.forEach((cloud, i) => {
+			if (cloudsData[i][5] == "120vw") {
+			cloud.style.transform = "scaleX(-1)";
+			}
+
 			gsap.fromTo(
 				cloud,
-				{ x: randomNumber(-100, -50) + "vw" },
+				{ x: cloudsData[i][5] },
 				{
-					x: "100vw",
+					x: cloudsData[i][5] == "120vw" ? "-100vw" : "100vw",
+					// x: "100vw",
 					duration: cloudsData[i][4],
 					repeat: -1,
 					ease: "none",
@@ -36,52 +78,14 @@ const CloudAnimation = () => {
 		})
 		const bigRefcurr = bigRef.current
 
-		gsap.fromTo(bigRefcurr, {
-			// x: "-50vw",
-			// y: "-50vh",
-		},
+		gsap.to(bigRefcurr,
 			{
 				x: "150vw",
 				duration: 5,
-				delay: 1,
+				delay: 0,
 				ease: "none",
 			}
 		)
-
-		// gsap.fromTo(bigRefcurr, {
-		// 	opacity: 1,
-		// },
-		// 	{
-		// 		opacity: 0,
-		// 		duration: 1,
-		// 		delay: 6,
-		// 		ease: "none",
-		// 	}
-		// )
-
-		// gasp.timeline when mainCloud goes above the CloudText it appears
-
-		// gsap.fromTo(
-		// 	mainCloudRef.current,
-		// 	{ x: "-100vw" },
-		// 	{
-		// 		x: "100vw",
-		// 		duration: mainCloud[4],
-		// 		repeat: -1,
-		// 		ease: "none",
-		// 	},
-		// )
-
-		// gsap.fromTo(
-		// 	text,
-		// 	{ opacity: 0 },
-		// 	{
-		// 		opacity: 1,
-		// 		duration: 40,
-		// 		delay: 1,
-		// 	}
-		// )
-
 
 	}, [cloudsData]) // Added cloudsData to the dependency array
 
@@ -98,20 +102,14 @@ const CloudAnimation = () => {
 						height: cloud[2],
 						top: cloud[3],
 						left: 0,
-						zIndex: 100,
-						// boxShadow: "0 0 10px 5px red",
-						// filter: "drop-shadow(0 0 10px red)",
+						zIndex: 170,
 					}}
 				/>
 			))}
-			<div ref={bigRef} className="absolute top-0 left-0 h-[100vh] w-[100vw] z-40 bg-[#87CEEB] opacity-100">
-				<img src={mainCloud[0]} style={styles.mainCloud}></img>
-				{/* <div  style={styles.bigAss}></div> */}
+			<div ref={bigRef} className="absolute top-0 left-0 h-[100vh] w-[100vw] bg-[#87CEEB] bg-xred-200 opacity-100" style={{ zIndex: 120 }}>
+			<img src={mainCloud[0]} style={styles.mainCloud}></img>
 			</div>
-				<Link href="http://localhost:3000/api/auth/signin">
-			<img 
-				src={"/cloudtext.png"} alt="cloudtext" style={styles.cloudText} ref={textRef} />
-				</Link>
+			<img src={"/cloudtext.png"} alt="cloudtext" style={styles.cloudText} ref={textRef} />
 		</div>
 	)
 }
@@ -127,7 +125,7 @@ const styles = {
 		overflow: "hidden",
 	},
 	cloudText: {
-		zIndex: 10,
+		zIndex: 110,
 	},
 	bigAss: {
 		position: "absolute" as const,
