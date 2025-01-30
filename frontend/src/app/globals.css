@@ -2,8 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+@font-face {
+  font-family: "AlphaCloud";
+  src: url("/AlphaClouds.ttf");
+}
+
+@font-face {
+  font-family: "CandyCloud";
+  src: url("/Cloud\ Candy.ttf");
+}
+
+@font-face {
+  font-family: "CottonCloud";
+  src: url("/Cotton\ Cloud.ttf");
+}
+
+* {
+  font-family: "AlphaCloud";
+  font-family: "CottonCloud";
+  font-family: "CandyCloud";
 }
 
 @layer base {
@@ -69,4 +86,15 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.mask1 {
+  -webkit-mask-image: url("/cloudtext.png");
+  mask-image: url("/cloudtext.png");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
