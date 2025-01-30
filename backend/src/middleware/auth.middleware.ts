@@ -1,16 +1,18 @@
-// // middleware/auth.middleware.ts
-// import { Request, Response, NextFunction } from 'express';
-// import { auth } from "@auth/express"
+// src/middleware/auth.middleware.ts
+import { Request, Response, NextFunction } from "express";
+import { getSession } from "@auth/express";
+import { authConfig } from "../config/auth.config";
 
-// export const requireAuth = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   const session = await auth(req, res);
-//   if (!session) {
-//     return res.status(401).json({ error: 'Non autorisé' });
-//   }
-//   req.user = session.user; // TypeScript pourrait se plaindre ici, il faudra étendre le type Request
-//   next();
-// };
+// Middleware pour protéger une route
+export async function requireAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+   const session = res.locals.session ?? (await getSession(req, authConfig))
+  if (!session?.user) {
+	res.status(401).json({ error: "Non autorisé" });
+  } else {
+    next()
+  }
+}

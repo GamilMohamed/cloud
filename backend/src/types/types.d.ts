@@ -1,8 +1,11 @@
-// types.d.ts
-import { User } from "@auth/core/types"; // Assure-toi d'importer le bon type User depuis ton système d'authentification
+// types/express.d.ts
+import { User } from "@auth/core/types"
 
-declare module 'express' {
-  interface Request {
-    user?: User; // Ajoute la propriété `user` à l'objet `Request`
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User; 
+      // ou n'importe quel type renvoyé par session.user (ex: { id: string; email?: string } etc.)
+    }
   }
 }
