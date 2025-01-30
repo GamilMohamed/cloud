@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useRef } from "react"
 import { gsap } from "gsap"
-import Link from "next/link"
 
 const CloudAnimation = () => {
 	const cloudContainerRef = useRef<HTMLDivElement>(null)
@@ -108,10 +107,8 @@ const CloudAnimation = () => {
 				<img src={mainCloud[0]} style={styles.mainCloud}></img>
 				{/* <div  style={styles.bigAss}></div> */}
 			</div>
-				<Link href="http://localhost:3000/api/auth/signin">
 			<img 
 				src={"/cloudtext.png"} alt="cloudtext" style={styles.cloudText} ref={textRef} />
-				</Link>
 		</div>
 	)
 }
