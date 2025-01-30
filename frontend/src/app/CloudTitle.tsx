@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useRef } from "react"
 import { gsap } from "gsap"
-import Link from "next/link"
 const CloudAnimation = () => {
 	const cloudContainerRef = useRef<HTMLDivElement>(null)
 	const textRef = useRef<HTMLHeadingElement>(null)
@@ -109,7 +108,8 @@ const CloudAnimation = () => {
 			<div ref={bigRef} className="absolute top-0 left-0 h-[100vh] w-[100vw] bg-[#87CEEB] bg-xred-200 opacity-100" style={{ zIndex: 120 }}>
 			<img src={mainCloud[0]} style={styles.mainCloud}></img>
 			</div>
-			<img src={"/cloudtext.png"} alt="cloudtext" style={styles.cloudText} ref={textRef} />
+			<img 
+				src={"/cloudtext.png"} alt="cloudtext" style={styles.cloudText} ref={textRef} />
 		</div>
 	)
 }
