@@ -1,4 +1,3 @@
-// src/routes/cloud.route.ts
 import { Router } from 'express';
 import { requireAuth } from '../middleware/auth.middleware';
 import * as cloudController from '../controllers/cloud.controller';
@@ -7,9 +6,43 @@ const CloudRouter = Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Cloud:
+ *       type: object
+ *       required:
+ *         - image
+ *         - filter
+ *         - answer
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated unique identifier
+ *         image:
+ *           type: string
+ *           format: base64
+ *           description: Base64 encoded cloud image
+ *         filter:
+ *           type: string
+ *           format: base64
+ *           description: Base64 encoded filter image
+ *         answer:
+ *           type: string
+ *           description: Title/description of what the user sees in the cloud
+ *         userId:
+ *           type: string
+ *           description: ID of the user who created the cloud
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Creation timestamp
+ */
+
+/**
+ * @swagger
  * /api/clouds:
  *   post:
- *     summary: Create a new cloud drawing
+ *     summary: Create a new cloud drawing with its filter
  *     tags: [Clouds]
  *     security:
  *       - BearerAuth: []
@@ -21,24 +54,38 @@ const CloudRouter = Router();
  *             type: object
  *             required:
  *               - image
+ *               - filter
  *               - answer
  *             properties:
  *               image:
  *                 type: string
- *                 description: Base64 encoded image
- *               answer:
- *                 type: string
- *                 description: What the user sees in the cloud
+ *                 format: base64
+ *                 description: Base64 encoded cloud image
  *               filter:
  *                 type: string
- *                 description: Drawing filter applied
+ *                 format: base64
+ *                 description: Base64 encoded filter image
+ *               answer:
+ *                 type: string
+ *                 description: Title/description of what the user sees in the cloud
  *     responses:
  *       201:
  *         description: Cloud created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Cloud'
+ *       400:
+ *         description: Invalid input or upload error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       401:
  *         description: Not authorized
- *       400:
- *         description: Invalid input
  */
 CloudRouter.post('/', requireAuth, cloudController.createCloud);
 
@@ -59,6 +106,12 @@ CloudRouter.post('/', requireAuth, cloudController.createCloud);
  *     responses:
  *       200:
  *         description: List of clouds
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Cloud'
  *       401:
  *         description: Not authorized
  */
@@ -80,6 +133,10 @@ CloudRouter.get('/', requireAuth, cloudController.getAllClouds);
  *     responses:
  *       200:
  *         description: Cloud details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Cloud'
  *       404:
  *         description: Cloud not found
  */
