@@ -141,6 +141,38 @@ export default function DrawingCanvas({ imageUrl }: { imageUrl: string }) {
 		link.click()
 	}
 
+	const handleSaveCloud = async () => {
+		try {
+			console.log('handleSaveCloud')
+			if (!drawCanvasRef.current) return;
+			console.log('drawCanvasRef.current', drawCanvasRef.current)
+			const drawingDataUrl = drawCanvasRef.current.toDataURL();
+			const cloudData = {
+				image: imageUrl,     
+				filter: drawingDataUrl,  
+				answer: answer,
+			};
+
+			
+			const response = await fetch('http://localhost:3000/api/clouds', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+				body: JSON.stringify(cloudData)
+			});
+
+			if (!response.ok) throw new Error('Failed to save cloud');
+
+			const savedCloud = await response.json();
+			// Gestion du succès (redirection, notification, etc.)
+
+		} catch (error) {
+			// Gestion de l'erreur
+		}
+	};
+
 	const saveCombined = () => {
 		const tempCanvas = document.createElement('canvas')
 		tempCanvas.width = canvasSize.width
@@ -192,9 +224,9 @@ export default function DrawingCanvas({ imageUrl }: { imageUrl: string }) {
 				>
 					<Redo2 className="w-4 h-4" />
 				</Button>
-				<Button 
-				disabled={history.length <= 1 || !answer}
-				onClick={saveDrawingOnly} className="gap-2">
+				<Button
+					disabled={history.length <= 1 || !answer}
+					onClick={handleSaveCloud} className="gap-2">
 					<Pencil className="w-4 h-4" />
 					Envoyer mon nuage !
 				</Button>
