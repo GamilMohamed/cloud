@@ -166,10 +166,9 @@ export default function DrawingCanvas({ imageUrl }: { imageUrl: string }) {
 			if (!response.ok) throw new Error('Failed to save cloud');
 
 			const savedCloud = await response.json();
-			// Gestion du succès (redirection, notification, etc.)
 
 		} catch (error) {
-			// Gestion de l'erreur
+			//a gerer
 		}
 	};
 

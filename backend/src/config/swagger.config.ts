@@ -1,5 +1,7 @@
 // src/config/swagger.config.ts
 import swaggerJsdoc from 'swagger-jsdoc';
+import { guessDocs } from '../docs/guess.docs';
+import { cloudDocs } from '../docs/cloud.docs';
 
 const options = {
   definition: {
@@ -23,10 +25,17 @@ const options = {
           bearerFormat: 'JWT',
         },
       },
+      schemas: {
+        ...cloudDocs.schemas,
+        ...guessDocs.schemas,
+      },
+    },
+    paths: {
+      ...cloudDocs.paths,
+      ...guessDocs.paths,
     },
   },
-  // Chemins vers les fichiers contenant les annotations
-  apis: ['./src/routes/*.ts'],
+  apis: ['./src/routes/*.ts'], //pas oblige
 };
 
 export const specs = swaggerJsdoc(options);

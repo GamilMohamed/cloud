@@ -19,6 +19,7 @@ import {
 	MinusIcon
 } from "lucide-react"
 import DrawingCanvas from "./DrawingCanvas"
+import UploadImg from "@/components/UploadImg"
 
 const ASPECT_RATIOS = [
 	{ value: 16 / 9, label: 'Landscape' },
@@ -120,29 +121,10 @@ export default function ImageCropper() {
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
 			<div className="max-w-4xl mx-auto space-y-6">
 				{!preview && (
-					<Card className="border-2 border-dashed border-gray-200 bg-white/50 backdrop-blur-sm">
-						<CardContent className="flex flex-col items-center justify-center p-12">
-							<ImageIcon className="w-12 h-12 text-gray-400 mb-4" />
-							<Label
-								htmlFor="image-upload"
-								className="cursor-pointer text-center"
-							>
-								<span className="block text-lg font-medium text-gray-700 mb-2">
-									Upload an image
-								</span>
-								<span className="text-sm text-gray-500">
-									Drop your image here or click to browse
-								</span>
-							</Label>
-							<Input
-								id="image-upload"
-								type="file"
-								accept="image/*"
-								onChange={handleFileChange}
-								className="hidden"
-							/>
-						</CardContent>
-					</Card>
+					<div>
+
+						<UploadImg handleUpload={handleFileChange} />
+					</div>
 				) || (<div className="space-y-6">
 					{!croppedImage &&
 						<Card className="bg-white/80 backdrop-blur-sm">

@@ -71,7 +71,7 @@ model Cloud {
 model Guess {
     id        String   @id @default(cuid()) @unique
     answer    String
-    filter    String?
+    filter    String
     user      User     @relation(fields: [userId], references: [id])
     userId    String
     cloud     Cloud    @relation(fields: [cloudId], references: [id])
