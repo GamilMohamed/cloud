@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { requireAuth } from '../middleware/auth.middleware';
 import * as cloudController from '../controllers/cloud.controller';
 
-const router = Router();
+const CloudRouter = Router();
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ const router = Router();
  *       400:
  *         description: Invalid input
  */
-router.post('/', requireAuth, cloudController.createCloud);
+CloudRouter.post('/', requireAuth, cloudController.createCloud);
 
 /**
  * @swagger
@@ -62,7 +62,7 @@ router.post('/', requireAuth, cloudController.createCloud);
  *       401:
  *         description: Not authorized
  */
-router.get('/', requireAuth, cloudController.getAllClouds);
+CloudRouter.get('/', requireAuth, cloudController.getAllClouds);
 
 /**
  * @swagger
@@ -83,6 +83,6 @@ router.get('/', requireAuth, cloudController.getAllClouds);
  *       404:
  *         description: Cloud not found
  */
-router.get('/:id', cloudController.getCloudById);
+CloudRouter.get('/:id', cloudController.getCloudById);
 
-export default router;
+export default CloudRouter;
