@@ -1,60 +1,180 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useCloudStore } from "@/app/stores/useCloudStore";
+import { gsap } from "gsap";
 
+interface Cloud {
+  id: number;
+  image: string;
+  filter: string;
+  aspect: "square" | "landscape" | "portrait";
+  user: {
+    id: number;
+    name: string;
+  };
+  createdAt: string;
+}
 
-function CloudImage({ cloud }) {
-  const [filter, setFilter] = useState(false);
-
-  return (
-    <div className="relative w-[300px] ">
-      {/* Base Cloud Image */}
-      <Image
-        onClick={() => setFilter(!filter)}
-        width="300"
-        height="300"
-        src={cloud.image}
-        alt="cloud"
-        className="cloud-image"
-      />
-
-      {/* Filter Overlay */}
-      {filter && (
-        <Image
-          onClick={() => setFilter(false)}
-          width="300"
-          height="300"
-          src={cloud.filter}
-          alt="cloud-filter"
-          className="absolute top-0 left-0 w-full h-full cloud-filter"
-        />
-      )}
-    </div>
+export function toTitleCase(str: string | undefined): string | undefined {
+  return str?.replace(
+    /\w\S*/g,
+    (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
   );
 }
-export default function AllClouds() {
-  const [clouds, setClouds] = useState([]);
+
+function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
+  const cloudRef = useRef<HTMLDivElement>(null);
+  const [filter, setFilter] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
-    async function fetchClouds() {
-      const response = await fetch("http://localhost:3000/api/clouds");
-      const data = await response.json();
-      setClouds(data);
-    }
-    fetchClouds();
-  }, []);
-  console.log(clouds);
+    if (!cloudRef.current) return;
+    const { right, left } = cloudRef.current.getBoundingClientRect();
+    const side = right > left ? right : left;
+
+    gsap.fromTo(cloudRef.current, {
+      opacity: 0,
+      x: side > window.innerWidth / 2  ? 100 : -100,
+    }, {
+      x: 0,
+      duration: 0.3 * i + 0.3,
+      opacity: 1,
+      ease: "power4.inOut",
+    });
+
+    return () => {
+      gsap.killTweensOf(cloudRef.current);
+    };
+  }
+    , []);
+  const dimensions = {
+    square: { width: 300, height: 300 },
+    landscape: { width: 600, height: 300 },
+    portrait: { width: 300, height: 600 }
+  };
+
+  const { width, height } = dimensions[cloud.aspect];
 
   return (
-	<>
-      {/* <h1 className="text-9xl text-sky-700">All Clouds</h1> */}
-    <main className="h-screen w-screen bg-sky-400 flex justify-center items-center flexx-wrap">
-      {clouds.map((cloud) => (
-		  <div key={cloud.id} className="cloud-card">
-          <CloudImage cloud={cloud} />
-          <p className="cloud-name">{cloud.userId}</p>
+    <Card
+      ref={cloudRef}
+      key={cloud.id}
+      className="overflow-hidden bg-transparent shadow-lg hover:shadow-xl transition-shadow duration-300"
+      style={{ width, height }}
+    >
+      <div
+        className="relative group"
+        style={{ width, height }}
+        onMouseEnter={() => setShowOverlay(true)}
+        onMouseLeave={() => setShowOverlay(false)}
+      >
+        <Image
+          onClick={() => setFilter(!filter)}
+          fill
+          src={cloud.image}
+          alt="cloud"
+          className="object-cover"
+        />
+
+        {filter && (
+          <Image
+            onClick={() => setFilter(false)}
+            fill
+            src={cloud.filter}
+            alt="cloud-filter"
+            className="absolute top-0 left-0 object-cover"
+          />
+        )}
+
+        {/* Overlay on hover */}
+        <div className={`absolute inset-0 bg-black/40 transition-opacity duration-200 ${showOverlay ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="absolute top-2 right-2">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilter(!filter);
+              }}
+              variant="secondary"
+              size="sm"
+              className="bg-white/80 hover:bg-white/90"
+            >
+              {filter ? "Hide hint" : "Show hint"}
+            </Button>
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 p-4 text-white space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">
+                {cloud.user.name.charAt(0)}
+              </div>
+              <p className="font-medium">{cloud.user.name}</p>
+            </div>
+
+            <p className="text-sm text-white/80">
+              {toTitleCase(
+                new Date(cloud.createdAt).toLocaleString("fr-FR", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                }),
+              )}
+            </p>
+
+            <Input
+              type="text"
+              placeholder="Que voyez vous ?"
+              className="bg-white/20 border-white/30 text-white placeholder:text-white/60"
+            />
+            <Button className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/50">
+              Envoyer
+            </Button>
+          </div>
         </div>
-      ))}
+      </div>
+    </Card>
+
+  );
+}
+
+
+export default function AllClouds() {
+  const { clouds, isLoading, error, fetchClouds, shuffleClouds } = useCloudStore();
+
+  useEffect(() => {
+    fetchClouds();
+  }, [fetchClouds]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return (
+    <main className="min-h-screen w-full bg-gradient-to-b from-sky-400 to-sky-300 py-8 px-4">
+      <div className="mx-auto max-w-7xl">
+        <Button
+          onClick={shuffleClouds}
+          className="w-full mb-8 bg-white/20 hover:bg-white/30 text-white border border-white/50"
+        >
+          Shuffle clouds
+        </Button>
+
+        <div className="flex flex-wrap justify-center gap-6">
+          {clouds.map((cloud: Cloud, i: number) => (
+            <div
+              key={cloud.id} className="flex justify-center items-center">
+              <CloudImage key={cloud.id} cloud={cloud} i={i} />
+            </div>
+
+          ))}
+        </div>
+      </div>
     </main>
-	</>
   );
 }

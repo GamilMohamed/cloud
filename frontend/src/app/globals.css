@@ -22,6 +22,28 @@ h1 {
   font-family: "CottonCloud";
   font-family: "CandyCloud";
 }
+.myaspect-portrait {
+  aspect-ratio: 1/2;
+}
+
+.myaspect-video {
+  aspect-ratio: 2/1;
+}
+
+.swiper {
+  margin: 100px auto;
+  width: 320px;
+  height: 240px;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
 
 
 @layer base {

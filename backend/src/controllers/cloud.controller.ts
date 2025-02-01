@@ -30,6 +30,7 @@ export const createCloud = async (req: Request, res: Response) => {
         image: cloudinaryImage.secure_url,
         answer,
         filter: cloudinaryFilter.secure_url,
+        aspect: size.width > size.height ? 'landscape' : size.width < size.height ? 'portrait' : 'square',
         //@ts-ignore
         userId: req.user?.id ?? '', // probleme de merde
       },
@@ -51,7 +52,22 @@ export const getAllClouds = async (req: Request, res: Response) => {
       orderBy: {
         createdAt: 'desc',
       },
+      select: {
+        id: true,
+        image: true,
+        filter: true,
+        createdAt: true,
+        aspect: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
     });
+    // add cloud aspect
     res.json(clouds);
   } catch (error) {
     res.status(400).json({ error: 'Erreur lors de la récupération' });

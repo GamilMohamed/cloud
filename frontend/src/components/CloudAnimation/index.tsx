@@ -4,9 +4,11 @@ import { CloudBackground } from "./CloudBackground";
 import { InfoCards } from "./InfoCards";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/app/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function CloudAnimation() {
-  const [showCards, setShowCards] = useState(true);
+  const router = useRouter();
+  const [showCards, setShowCards] = useState(false);
   const { user, loading } = useAuth();
 
   useEffect(() => {
@@ -21,14 +23,19 @@ export default function CloudAnimation() {
       }
     }
     fetchSession();
+
+    
   }, []);
+  function CompleteAnimation() {
+    router.push("/allclouds");
+  }
 
   return (
     <main className="h-screen w-screen bg-sky-400 overflow-hidden transform translate-z-0 flex justify-center items-center">
       {!showCards && (
         <>
           <CloudBackground />
-          <CloudText onAnimationComplete={() => setShowCards(true)} />
+          <CloudText onAnimationComplete={CompleteAnimation} />
         </>
       )}
       {showCards && <InfoCards />}

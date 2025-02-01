@@ -22,16 +22,16 @@ import DrawingCanvas from "./DrawingCanvas";
 import { useAuth } from "../contexts/AuthContext";
 
 const ASPECT_RATIOS = [
-  { value: 16 / 9, label: "Landscape" },
+  { value: 2 / 1, label: "Landscape" },
   { value: 1 / 1, label: "Square" },
-  { value: 9 / 16, label: "Portrait" },
+  // { value: 1 / 2, label: "Portrait" },
 ];
 
 export default function ImageCropper() {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
-  const [ratio, setRatio] = useState<number>(16 / 9);
+  const [ratio, setRatio] = useState<number>(2 / 1);
   const cropperRef = useRef<Cropper>(null);
 
   const { user, loading } = useAuth();

@@ -65,6 +65,7 @@ model Cloud {
     user    User    @relation(fields: [userId], references: [id])
     userId  String
     guesses Guess[] 
+    aspect  String @default("square")
     createdAt DateTime @default(now())
 }
 
