@@ -2,16 +2,32 @@
 import { CloudText } from "./CloudText";
 import { CloudBackground } from "./CloudBackground";
 import { InfoCards } from "./InfoCards";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 export default function CloudAnimation() {
   const [showCards, setShowCards] = useState(true);
-  
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    async function fetchSession() {
+      console.log("fetching session");
+      const response = await fetch("http://localhost:3000/api/auth/session", {
+        credentials: "include", // Important! This sends cookies
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        console.log(userData);
+      }
+    }
+    fetchSession();
+  }, []);
+
   return (
     <main className="h-screen w-screen bg-sky-400 overflow-hidden transform translate-z-0 flex justify-center items-center">
       {!showCards && (
         <>
-          <CloudBackground  />
+          <CloudBackground />
           <CloudText onAnimationComplete={() => setShowCards(true)} />
         </>
       )}

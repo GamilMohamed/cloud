@@ -1,5 +1,11 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -7,8 +13,13 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
+  const { user, loading } = useAuth();
+
   const handleGoogleLogin = async () => {
-	window.location.href = "http://localhost:3000/api/auth/google";
+    window.location.href =
+      "http://localhost:3000/api/auth/signin?callbackUrl=http://localhost:4000/uploadcloud";
+
+    // window.location.href = "http://localhost:3000/api/auth/google";
     console.log("Google login clicked");
   };
 
