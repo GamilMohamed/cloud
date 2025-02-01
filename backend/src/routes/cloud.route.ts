@@ -115,7 +115,7 @@ CloudRouter.post('/', requireAuth, cloudController.createCloud);
  *       401:
  *         description: Not authorized
  */
-CloudRouter.get('/', requireAuth, cloudController.getAllClouds);
+CloudRouter.get('/', cloudController.getAllClouds);
 
 /**
  * @swagger

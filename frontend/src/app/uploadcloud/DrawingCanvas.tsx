@@ -151,9 +151,13 @@ export default function DrawingCanvas({ imageUrl }: { imageUrl: string }) {
 				image: imageUrl,     
 				filter: drawingDataUrl,  
 				answer: answer,
+				width: canvasSize.width,
+				height: canvasSize.height,
+				size: {width: canvasSize.width, height: canvasSize.height}
 			};
 
 			
+			console.log('cloudData', cloudData)
 			const response = await fetch('http://localhost:3000/api/clouds', {
 				method: 'POST',
 				headers: {

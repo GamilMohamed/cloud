@@ -5,6 +5,7 @@ import CloudDiv from "./CloudDiv";
 import { LoginModal } from "./LoginModal";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function InfoCards() {
   const router = useRouter();
@@ -43,7 +44,9 @@ export function InfoCards() {
           className="divcloud h-40 cursor-pointer"
           onClick={() => console.log("Cloud checked!")}
         >
+          <Link href="/allclouds">
           <p className="pt-4">CHECK THEM CLOUDS</p>
+          </Link>
         </CloudDiv>
         <CloudDiv
           ref={card2Ref}
