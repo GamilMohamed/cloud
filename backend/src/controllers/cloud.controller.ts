@@ -5,9 +5,8 @@ import cloudinary from '../config/cloudinary.config';
 
 export const createCloud = async (req: Request, res: Response) => {
   try {
-    const { image, answer, filter, size, width, height } = req.body;
+    const { image, answer, filter, size } = req.body;
 
-    console.log('createCloud',  size, width, height);
     // 1. D'abord, on upload les images à Cloudinary
     const [cloudinaryImage, cloudinaryFilter] = await Promise.all([
       cloudinary.uploader.upload(image, {
@@ -54,7 +53,7 @@ export const getAllClouds = async (req: Request, res: Response) => {
 
     // Fetch data from the database
     const clouds = await prisma.cloud.findMany({
-      take: limit,
+      // take: limit,
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,
