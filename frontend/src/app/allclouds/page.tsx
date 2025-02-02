@@ -1,11 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useCloudStore } from "@/app/stores/useCloudStore";
 import { gsap } from "gsap";
+import UploadCloud from "../uploadcloud/UploadCloud";
+import ImageCropper from "../uploadcloud/page";
+
+import { ImageIcon, Upload } from "lucide-react";
 
 interface Cloud {
   id: number;
@@ -27,9 +32,29 @@ export function toTitleCase(str: string | undefined): string | undefined {
 }
 
 function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
+  const [device, setDevice] = useState("desktop");
+
   const cloudRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setDevice("mobile");
+      } else {
+        setDevice("desktop");
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     if (!cloudRef.current) return;
     const { right, left } = cloudRef.current.getBoundingClientRect();
@@ -37,7 +62,7 @@ function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
 
     gsap.fromTo(cloudRef.current, {
       opacity: 0,
-      x: side > window.innerWidth / 2  ? 100 : -100,
+      x: side > window.innerWidth / 2 ? 100 : -100,
     }, {
       x: 0,
       duration: 0.3 * i + 0.3,
@@ -56,7 +81,13 @@ function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
     portrait: { width: 300, height: 600 }
   };
 
-  const { width, height } = dimensions[cloud.aspect];
+  const mobileDimensions = {
+    square: { width: 200, height: 200 },
+    landscape: { width: 400, height: 200 },
+    portrait: { width: 200, height: 400 }
+  };
+
+  const { width, height } = device === "desktop" ? dimensions[cloud.aspect] : mobileDimensions[cloud.aspect];
 
   return (
     <Card
@@ -139,8 +170,39 @@ function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
   );
 }
 
+// function UploadCloud() {
+
+//   return (
+//     <Card className="border-2 border-dashed border-gray-200 bg-white/50 backdrop-blur-sm aspect-square text-red-400 h-[300px]">
+//     <CardContent className="flex flex-col items-center justify-center p-12">
+//       <ImageIcon className="w-12 h-12 text-gray-400 mb-4" />
+//       <Label
+//         htmlFor="image-upload"
+//         className="cursor-pointer text-center"
+//       >
+//         <span className="block text-lg font-medium text-gray-700 mb-2">
+//           Upload an image
+//         </span>
+//         <span className="text-sm text-gray-500">
+//           Drop your image here or click to browse
+//         </span>
+//       </Label>
+//       <Input
+//         id="image-upload"
+//         type="file"
+//         accept="image/*"
+//         // onChange={handleFileChange}
+//         className="hidden"
+//       />
+//     </CardContent>
+//   </Card>
+//   );
+// }
+
+
 
 export default function AllClouds() {
+
   const { clouds, isLoading, error, fetchClouds, shuffleClouds } = useCloudStore();
 
   useEffect(() => {
@@ -155,6 +217,7 @@ export default function AllClouds() {
     return <div>Error: {error}</div>;
   }
 
+  console.log("clouds", clouds);
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-sky-400 to-sky-300 py-8 px-4">
       <div className="mx-auto max-w-7xl">
@@ -164,8 +227,8 @@ export default function AllClouds() {
         >
           Shuffle clouds
         </Button>
-
         <div className="flex flex-wrap justify-center gap-6">
+          <ImageCropper />
           {clouds.map((cloud: Cloud, i: number) => (
             <div
               key={cloud.id} className="flex justify-center items-center">

@@ -44,30 +44,42 @@ export const createCloud = async (req: Request, res: Response) => {
   }
 };
 
+import { createClient } from 'redis';
+
+const redisClient = createClient();
+redisClient.connect();
+
 export const getAllClouds = async (req: Request, res: Response) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const cacheKey = `clouds:${limit}`;
+
+    // Check if data is in Redis cache
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+      res.setHeader('Cache-Control', 'public, max-age=100');
+      return res.json(JSON.parse(cachedData));
+    }
+
+    // Fetch data from the database
     const clouds = await prisma.cloud.findMany({
       take: limit,
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         image: true,
         filter: true,
         createdAt: true,
         aspect: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-          },
-        },
+        user: { select: { id: true, name: true, image: true } },
       },
     });
-    // add cloud aspect
+
+    // Save data to Redis cache
+    await redisClient.set(cacheKey, JSON.stringify(clouds), { EX: 100 }); // Cache for 100 seconds
+
+    res.setHeader('Cache-Control', 'public, max-age=100');
     res.json(clouds);
   } catch (error) {
     res.status(400).json({ error: 'Erreur lors de la récupération' });
