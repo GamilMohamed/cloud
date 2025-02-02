@@ -14,7 +14,7 @@ export function toTitleCase(str: string | undefined): string | undefined {
 }
 
 export default function AllClouds() {
-  const { clouds, error, fetchClouds, shuffleClouds } = useCloudStore();
+  const { clouds, error, fetchClouds, orderClouds } = useCloudStore();
 
   useEffect(() => {
     fetchClouds();
@@ -44,14 +44,14 @@ export default function AllClouds() {
 
   return (
     <main className="min-h-screen w-full bg-sky-500 py-8 px-4">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl  flex justify-center items-center flex-col">
         <Button
-          onClick={shuffleClouds}
+          onClick={orderClouds}
           className="w-full mb-8 bg-white/20 hover:bg-white/30 text-white border border-white/50"
         >
           Shuffle clouds
         </Button>
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex flex-wrap justify-center gap-6 bg-green-400 w-full lg:w-3/4">
         <UploadPagex />
           {combinedItems.map((item, index) => (
             <div 

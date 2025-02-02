@@ -56,6 +56,7 @@ export default function ImageUploader({ onFileSelect }: ImageUploaderProps) {
   }, [onFileSelect]);
 
   const checkAuth = () => {
+    if (loading) return false;
     if (!user) {
       router.push("/api/auth/signin?callbackUrl=/upload");
       return false;
@@ -69,8 +70,6 @@ export default function ImageUploader({ onFileSelect }: ImageUploaderProps) {
     const file = e.target.files?.[0];
     if (file) onFileSelect(file);
   };
-
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div
