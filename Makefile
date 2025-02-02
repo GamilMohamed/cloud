@@ -1,5 +1,22 @@
 all:
-	docker-compose up --build --no-recreate -d
+	./startdatabase.sh
+	@echo "Starting frontend in a screen session..."
+	screen -dmS frontend bash -c 'cd frontend && npm install && npm run dev; exec bash'
+	@echo "Starting backend in a screen session..."
+	screen -dmS backend bash -c 'cd backend && npm install && npm run dev; exec bash'
+
+db:
+	@echo "Starting database in a screen session..."
+	./startdatabase.sh
+
+frontend:
+	@echo "Starting frontend in a screen session..."
+	screen -dmS frontend bash -c 'cd frontend && npm install && npm run dev; exec bash'
+
+# Run backend in a screen session
+backend:
+	@echo "Starting backend in a screen session..."
+	screen -dmS backend bash -c 'cd backend && npm install && npm run dev; exec bash'
 
 frontlogs:
 	docker logs matcha-frontend-1 -f
