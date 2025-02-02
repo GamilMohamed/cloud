@@ -1,7 +1,6 @@
 "use client";
 import { CloudText } from "./CloudText";
 import { CloudBackground } from "./CloudBackground";
-import { InfoCards } from "./InfoCards";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useRouter } from "next/navigation";
@@ -24,7 +23,7 @@ export default function CloudAnimation() {
     }
     fetchSession();
 
-    
+
   }, []);
   function CompleteAnimation() {
     router.push("/allclouds");
@@ -38,7 +37,6 @@ export default function CloudAnimation() {
           <CloudText onAnimationComplete={CompleteAnimation} />
         </>
       )}
-      {showCards && <InfoCards />}
     </main>
   );
 }

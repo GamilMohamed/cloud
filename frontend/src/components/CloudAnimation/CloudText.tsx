@@ -50,7 +50,7 @@ export function CloudText({ onAnimationComplete }: CloudTextProps) {
       }).to(textRef.current, {
         scale: 190,
         // duration: 1,
-        delay: 1,
+        // delay: 1,
         ease: "power4.inOut",
       }).add(() => {
         onAnimationComplete();
@@ -71,7 +71,7 @@ export function CloudText({ onAnimationComplete }: CloudTextProps) {
         ref={textRef}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center"
       >
-      <div ref={cloudZoomRef} className="bg-sky-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-24 opacxity-0"></div>
+        <div ref={cloudZoomRef} className="bg-sky-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-24 opacxity-0"></div>
 
         {letters.map((letter, index) => (
           <h1

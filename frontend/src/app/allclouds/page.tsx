@@ -105,6 +105,8 @@ function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
         <Image
           onClick={() => setFilter(!filter)}
           fill
+          priority
+          sizes="100%"
           src={cloud.image}
           alt="cloud"
           className="object-cover"
@@ -170,37 +172,6 @@ function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
   );
 }
 
-// function UploadCloud() {
-
-//   return (
-//     <Card className="border-2 border-dashed border-gray-200 bg-white/50 backdrop-blur-sm aspect-square text-red-400 h-[300px]">
-//     <CardContent className="flex flex-col items-center justify-center p-12">
-//       <ImageIcon className="w-12 h-12 text-gray-400 mb-4" />
-//       <Label
-//         htmlFor="image-upload"
-//         className="cursor-pointer text-center"
-//       >
-//         <span className="block text-lg font-medium text-gray-700 mb-2">
-//           Upload an image
-//         </span>
-//         <span className="text-sm text-gray-500">
-//           Drop your image here or click to browse
-//         </span>
-//       </Label>
-//       <Input
-//         id="image-upload"
-//         type="file"
-//         accept="image/*"
-//         // onChange={handleFileChange}
-//         className="hidden"
-//       />
-//     </CardContent>
-//   </Card>
-//   );
-// }
-
-
-
 export default function AllClouds() {
 
   const { clouds, isLoading, error, fetchClouds, shuffleClouds } = useCloudStore();
@@ -209,17 +180,13 @@ export default function AllClouds() {
     fetchClouds();
   }, [fetchClouds]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>Error: {error}</div>;
   }
 
   console.log("clouds", clouds);
   return (
-    <main className="min-h-screen w-full bg-gradient-to-b from-sky-400 to-sky-300 py-8 px-4">
+    <main className="min-h-screen w-full bg-sky-500 py-8 px-4">
       <div className="mx-auto max-w-7xl">
         <Button
           onClick={shuffleClouds}
