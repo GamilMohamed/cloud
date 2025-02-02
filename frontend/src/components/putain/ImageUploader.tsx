@@ -24,34 +24,34 @@ export default function ImageUploader({ onFileSelect }: ImageUploaderProps) {
 
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
-      dropZone.classList.add('border-blue-500');
+      dropZone.classList.add("border-blue-500");
     };
 
     const handleDragLeave = (e: DragEvent) => {
       e.preventDefault();
-      dropZone.classList.remove('border-blue-500');
+      dropZone.classList.remove("border-blue-500");
     };
 
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
-      dropZone.classList.remove('border-blue-500');
-      
+      dropZone.classList.remove("border-blue-500");
+
       if (!checkAuth()) return;
-      
+
       const file = e.dataTransfer?.files[0];
-      if (file?.type.startsWith('image/')) {
+      if (file?.type.startsWith("image/")) {
         onFileSelect(file);
       }
     };
 
-    dropZone.addEventListener('dragover', handleDragOver);
-    dropZone.addEventListener('dragleave', handleDragLeave);
-    dropZone.addEventListener('drop', handleDrop);
+    dropZone.addEventListener("dragover", handleDragOver);
+    dropZone.addEventListener("dragleave", handleDragLeave);
+    dropZone.addEventListener("drop", handleDrop);
 
     return () => {
-      dropZone.removeEventListener('dragover', handleDragOver);
-      dropZone.removeEventListener('dragleave', handleDragLeave);
-      dropZone.removeEventListener('drop', handleDrop);
+      dropZone.removeEventListener("dragover", handleDragOver);
+      dropZone.removeEventListener("dragleave", handleDragLeave);
+      dropZone.removeEventListener("drop", handleDrop);
     };
   }, [onFileSelect]);
 
@@ -65,7 +65,7 @@ export default function ImageUploader({ onFileSelect }: ImageUploaderProps) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!checkAuth()) return;
-    
+
     const file = e.target.files?.[0];
     if (file) onFileSelect(file);
   };
@@ -75,7 +75,8 @@ export default function ImageUploader({ onFileSelect }: ImageUploaderProps) {
   return (
     <div
       ref={dropZoneRef}
-	  className="w-[200px] sm:w-[300px] aspect-square flex justify-center items-center">
+      className="w-[180px] sm:w-[300px] aspect-square flex justify-center items-center"
+    >
       <Card className="border-2 border-dashed border-gray-200 bg-white/50 backdrop-blur-sm h-full w-full">
         <CardContent className="flex flex-col items-center justify-center p-12">
           <ImageIcon className="w-12 h-12 text-gray-400 mb-4" />
