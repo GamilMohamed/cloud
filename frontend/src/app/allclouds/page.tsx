@@ -51,9 +51,14 @@ export default function AllClouds() {
         >
           Shuffle clouds
         </Button>
-        <div className="flex flex-wrap justify-center gap-6 bg-green-400 w-full lg:w-3/4">
+        <div className="flex flex-wrap justify-center gap-6 bg-greexn-400 w-full lg:w-3/4">
         <UploadPagex />
-          {combinedItems.map((item, index) => (
+        {clouds.map((cloud, index) => (
+          <CloudImage 
+          key={cloud.id}
+          cloud={cloud} i={index} />
+        ))}
+          {/* {combinedItems.map((item, index) => (
             <div 
               key={item.type === 'cloud' ? item.cloud.id : 'upload'}
               className="flex justify-center items-center"
@@ -64,7 +69,7 @@ export default function AllClouds() {
                 <UploadPagex />
               )}
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </main>

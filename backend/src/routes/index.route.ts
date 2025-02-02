@@ -7,7 +7,7 @@ import CloudRouter from './cloud.route';
 const router = Router();
 
 router.get('/', function (req, res, next) {
-  res.redirect('http://localhost:4000/uploadcloud');
+  res.redirect('http://localhost:4000/');
   // res.json({ message: 'hesdasadsad' });
 });
 

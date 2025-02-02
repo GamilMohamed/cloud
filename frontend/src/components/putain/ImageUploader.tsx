@@ -81,10 +81,10 @@ export default function ImageUploader({ onFileSelect }: ImageUploaderProps) {
           <ImageIcon className="w-12 h-12 text-gray-400 mb-4" />
           <Label htmlFor="image-upload" className="cursor-pointer text-center">
             <span className="block text-lg font-medium text-gray-700 mb-2">
-              Upload an image
+              Upload a cloud
             </span>
             <span className="text-sm text-gray-500 hidden sm:block">
-              Drop your image here or click to browse
+              Drop your cloud here or click to browse
             </span>
           </Label>
           <Input

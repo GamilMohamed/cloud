@@ -46,12 +46,25 @@ export const useCloudStore = create<CloudStore>((set) => ({
 
 	orderClouds: () => {
 		set((state) => {
-			alert("Ordering clouds");
-			const lenOfLandscapes = state.clouds.filter((cloud) => cloud.aspect === "landscape").length;
-			const lenOfSquares = state.clouds.filter((cloud) => cloud.aspect === "square").length;
-			const diff = lenOfLandscapes - lenOfSquares;
-			// Add your ordering logic here
-			// order 1 landscape then 1 square and if there are more landscapes than squares, add a fake cloud
+			console.log(state.clouds.map((cloud) => cloud.aspect));
+			const onlySquare = state.clouds.filter((cloud) => cloud.aspect === "square");
+			const onlyLandscape = state.clouds.filter((cloud) => cloud.aspect === "landscape");
+
+			const newC = [];
+			let diff = onlySquare.length - onlyLandscape.length;
+
+			for (let i = 0; i < Math.max(onlySquare.length, onlyLandscape.length); i++) {
+				if (diff > 3 && i < onlySquare.length) {
+					newC.push(onlySquare[i]);
+					diff--;
+				}
+				if (onlyLandscape[i])
+					newC.push(onlyLandscape[i]);
+				if (onlySquare[i])
+					newC.push(onlySquare[i]);
+			}
+
+			return { clouds: newC };
 			return {
 				clouds: state.clouds.sort((a, b) => {
 					if (a.aspect === "landscape" && b.aspect === "square") {
