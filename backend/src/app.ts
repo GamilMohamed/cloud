@@ -28,6 +28,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({ error: "Not Found" });
 });
 
+app.get('/api/auth/signin/callback', (req, res) => {
+  // After successful authentication
+  res.redirect('http://localhost:4000/uploadcloud') // or whatever frontend route you want
+})
+
 // Global error handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const status = err.status || 500;

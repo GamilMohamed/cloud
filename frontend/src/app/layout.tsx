@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 };
 
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,11 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="icon" href="/cloud.svg" sizes="any" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        		<Providers>
-        {children}		</Providers>
+        <Providers>{children}
+        </Providers>
       </body>
     </html>
   );

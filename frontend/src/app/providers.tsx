@@ -1,7 +1,7 @@
 "use client";
 
-import { gsap } from "gsap";
 import { TransitionRouter } from "next-transition-router";
+import { AuthProvider } from "./contexts/AuthContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,7 +13,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         next();
       }}
     >
-      {children}
+      <AuthProvider>
+        {children}
+      </AuthProvider>
     </TransitionRouter>
   );
 }

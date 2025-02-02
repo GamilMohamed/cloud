@@ -8,7 +8,8 @@ import GuessRouter from './guess.route';
 const router = Router();
 
 router.get('/', function (req, res, next) {
-  res.json({ message: 'hesdasadsad' });
+  res.redirect('http://localhost:4000/');
+  // res.json({ message: 'hesdasadsad' });
 });
 
 router.use('/api/auth', AuthRouter);
