@@ -9,7 +9,7 @@ interface UploadCardProps {
 
 export function UploadCard({ onFileChange }: UploadCardProps) {
 	return (
-		<Card className="border-2 border-dashed border-gray-200 bg-white/50 backdrop-blur-sm text-red-400 w-full max-w-3xl mx-auto">
+		<Card className="border-2 border-dashed border-gray-200 bg-white/50 backdrop-blur-sm text-red-400 max-w-3xl mx-auto w-[200px]  sm:w-[300px] flex justify-center items-center">
 			<CardContent className="flex flex-col items-center justify-center p-4 sm:p-12">
 				<ImageIcon className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 mb-4" />
 				<Label htmlFor="image-upload" className="cursor-pointer text-center">

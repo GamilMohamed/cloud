@@ -18,9 +18,18 @@ import {
 	Pencil,
 	Image as ImageIcon2
 } from "lucide-react"
+import router from "next/router"
 
 
-export default function DrawingCanvas({ imageUrl }: { imageUrl: string }) {
+interface DrawingCanvasProps {
+	imageUrl: string;
+	onSave: (drawing: string, answer: string) => void;
+	onCancel: () => void;
+  }
+  
+
+
+export default function DrawingCanvas({ imageUrl, onSave, onCancel }: DrawingCanvasProps) {
 	const [answer, setAnswer] = useState('')
 	const baseCanvasRef = useRef<HTMLCanvasElement>(null)
 	const drawCanvasRef = useRef<HTMLCanvasElement>(null)
@@ -167,9 +176,12 @@ export default function DrawingCanvas({ imageUrl }: { imageUrl: string }) {
 				body: JSON.stringify(cloudData)
 			});
 
+			
 			if (!response.ok) throw new Error('Failed to save cloud');
-
+			
 			const savedCloud = await response.json();
+			sessionStorage.removeItem('croppedImage');
+			router.push('/gallery');
 			// Gestion du succès (redirection, notification, etc.)
 
 		} catch (error) {

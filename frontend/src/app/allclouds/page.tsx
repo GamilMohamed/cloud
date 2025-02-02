@@ -1,16 +1,34 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useCloudStore } from "@/app/stores/useCloudStore";
 import { gsap } from "gsap";
-import UploadCloud from "../uploadcloud/UploadCloud";
-import ImageCropper from "../uploadcloud/page";
 
-import { ImageIcon, Upload } from "lucide-react";
+import ImageUploader from "@/components/putain/ImageUploader";
+import { useRouter } from "next/navigation";
+
+function UploadPagex() {
+  const router = useRouter();
+
+  const handleFileSelect = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imageUrl = reader.result as string;
+      // Store the image in sessionStorage to pass to the crop page
+      sessionStorage.setItem('uploadedImage', imageUrl);
+      router.push('/crop');
+    };
+    reader.readAsDataURL(file);
+  };
+
+
+  return (
+      <ImageUploader onFileSelect={handleFileSelect} />
+  );
+}
 
 interface Cloud {
   id: number;
@@ -82,9 +100,9 @@ function CloudImage({ cloud, i }: { cloud: Cloud, i: number }) {
   };
 
   const mobileDimensions = {
-    square: { width: 200, height: 200 },
-    landscape: { width: 400, height: 200 },
-    portrait: { width: 200, height: 400 }
+    square: { width: 180, height: 180 },
+    landscape: { width: 360, height: 180 },
+    portrait: { width: 180, height: 360 }
   };
 
   const { width, height } = device === "desktop" ? dimensions[cloud.aspect] : mobileDimensions[cloud.aspect];
@@ -195,13 +213,12 @@ export default function AllClouds() {
           Shuffle clouds
         </Button>
         <div className="flex flex-wrap justify-center gap-6">
-          <ImageCropper />
+          <UploadPagex />
           {clouds.map((cloud: Cloud, i: number) => (
             <div
               key={cloud.id} className="flex justify-center items-center">
               <CloudImage key={cloud.id} cloud={cloud} i={i} />
             </div>
-
           ))}
         </div>
       </div>
