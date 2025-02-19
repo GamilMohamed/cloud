@@ -15,6 +15,7 @@ interface Cloud {
 
 interface CloudStore {
 	clouds: Cloud[];
+	totalClouds: number | null;
 	isLoading: boolean;
 	error: string | null;
 	fetchClouds: () => Promise<void>;
@@ -24,13 +25,20 @@ interface CloudStore {
 
 export const useCloudStore = create<CloudStore>((set) => ({
 	clouds: [],
+	totalClouds: null,
 	isLoading: false,
 	error: null,
 
 	fetchClouds: async () => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await fetch("http://localhost:3000/api/clouds");
+			const response = await fetch("http://localhost:3000/api/clouds", {
+				credentials: 'include',
+			});
+			//totalClouds is in the headers
+			const totalClouds = response.headers.get("X-Total-Count");
+			set({ totalClouds: totalClouds ? parseInt(totalClouds, 10) : null });
+			console.log(response.headers);
 			const data = await response.json();
 			set({ clouds: data, isLoading: false });
 		} catch (error) {

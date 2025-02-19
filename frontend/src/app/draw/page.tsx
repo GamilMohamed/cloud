@@ -25,12 +25,12 @@ export default function DrawPage() {
       const response = await fetch('http://localhost:3000/api/clouds', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-		credentials: 'include',
+        credentials: 'include',
         body: JSON.stringify({
           image: imageUrl,
-		  filter: drawing,
+          filter: drawing,
           answer,
-		  size,
+          size,
         })
       });
 
@@ -38,7 +38,7 @@ export default function DrawPage() {
 
       // Clean up
       sessionStorage.removeItem('croppedImage');
-      
+
       // Redirect to gallery or success page
       router.push('/allclouds');
     } catch (error) {
@@ -57,7 +57,7 @@ export default function DrawPage() {
   return (
     <div className="container mx-auto px-4 py-8 h-screen">
       <h1 className="text-2xl font-bold text-center mb-8">Draw On Your Image</h1>
-	  <DrawingCanvas imageUrl={imageUrl} onSave={handleSave} onCancel={handleCancel} />
+      <DrawingCanvas imageUrl={imageUrl} onSave={handleSave} onCancel={handleCancel} />
       {/* <DrawingCanvas
         imageUrl={imageUrl}
         onSave={handleSave}
