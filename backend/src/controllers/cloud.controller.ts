@@ -16,16 +16,9 @@ export const createCloud = async (req: Request, res: Response) => {
         folder: 'clouds/filters',
       })
     ]);
-    // data: {
-    //   image: cloudinaryImage.secure_url, // On stocke l'URL Cloudinary
-    //   filter: cloudinaryFilter.secure_url, // On stocke l'URL Cloudinary
-    //   answer,
-    //    //@ts-ignore
-    //   userId: req.user.id,
-    // },
     // 2. Ensuite, on sauvegarde les URLs dans notre base de données
     const cloud = await prisma.cloud.create({
-    data: {
+      data: {
         image: cloudinaryImage.secure_url,
         answer,
         filter: cloudinaryFilter.secure_url,
@@ -46,14 +39,19 @@ export const createCloud = async (req: Request, res: Response) => {
 export const getAllClouds = async (req: Request, res: Response) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-
-    // Check if data is in Redis cache
-
-
-
-    // Fetch data from the database
+    const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
+    console.log("coucoucouc");
+    //@ts-ignore
+    console.log(req.user);
     const clouds = await prisma.cloud.findMany({
-      // take: limit,
+      where: {
+        NOT: {
+          // @ts-ignore
+          userId: req.user?.id || '',
+        },
+      },
+      take: limit,
+      skip: skip,
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,
@@ -61,14 +59,46 @@ export const getAllClouds = async (req: Request, res: Response) => {
         filter: true,
         createdAt: true,
         aspect: true,
-        user: { select: { id: true, name: true, image: true } },
+        user: { select: { id: true, name: true, email: true } },
       },
     });
 
+    const nbClouds = await prisma.cloud.count();
+
     // Save data to Redis cache
+    res.setHeader('X-Total-Count', nbClouds.toString());
     res.setHeader('Cache-Control', 'public, max-age=100');
     res.json(clouds);
   } catch (error) {
+    res.status(400).json({ error: 'Erreur lors de la récupération' });
+  }
+};
+
+export const getCloudsByUserId = async (req: Request, res: Response) => {
+  try {
+    const clouds = await prisma.cloud.findMany({
+      where: {
+        // @ts-ignore
+        userId: req.user?.id || '',
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(clouds);
+  } catch (error) {
+    res.status(400).json({ error: 'Erreur lors de la récupération' });
+  }
+};
+
+export const getGuessesByCloudId = async (req: Request, res: Response) => {
+  try {
+    const guesses = await prisma.guess.findMany({
+      where: {
+        cloudId: req.params.id,
+      },
+    });
+    res.json(guesses);
+  }
+  catch (error) {
     res.status(400).json({ error: 'Erreur lors de la récupération' });
   }
 };

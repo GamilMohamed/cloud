@@ -1,6 +1,5 @@
 //index.route.ts
 import { Router } from 'express';
-import UsersRouter from './users.route';
 import AuthRouter from './auth.route';
 import CloudRouter from './cloud.route';
 import GuessRouter from './guess.route';
@@ -15,10 +14,6 @@ router.get('/', function (req, res, next) {
 router.use('/api/auth', AuthRouter);
 router.use('/api/clouds', CloudRouter);
 router.use('/api/guess', GuessRouter);
-
-//test
-router.use('/users', UsersRouter);
-
 
 
 export default router;

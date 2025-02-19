@@ -111,6 +111,14 @@ export const cloudDocs = {
                 type: "integer"
               },
               description: "Number of clouds to return"
+            },
+            {
+              in: "query",
+              name: "skip",
+              schema: {
+                type: "integer"
+              },
+              description: "Number of clouds to skip"
             }
           ],
           responses: {
