@@ -3,25 +3,6 @@ import { Request, Response } from 'express';
 import { prisma } from '../prisma';
 import cloudinary from '../config/cloudinary.config';
 
-export const getANewGuess = async (req: Request, res: Response) => {
-  try {
-    const cloud = await prisma.cloud.findFirst({
-      where: {
-        NOT: {
-          guesses: {
-            some: {
-              // @ts-ignore
-              userId: req.user?.id || ''
-            }
-          }
-        }
-      }
-    });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(400).json({ error: 'Erreur lors de la recuperation d\'un guess' });
-  }
-};
 
 export const getAllGuesses = async (req: Request, res: Response) => {
   try {
@@ -48,9 +29,9 @@ export const getGuessById = async (req: Request, res: Response) => {
   }
 };
 
-export const getGuessByCloudId = async (req: Request, res: Response) => {
+export const getGuessesByCloudId = async (req: Request, res: Response) => {
   try {
-    const guess = await prisma.guess.findFirst({
+    const guess = await prisma.guess.findMany({
       where: {
         cloudId: req.params.cloudId
       }

@@ -40,17 +40,38 @@ export const getAllClouds = async (req: Request, res: Response) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
     const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
-    console.log("coucoucouc");
     //@ts-ignore
-    console.log(req.user);
+    // console.log(req.user);
+    const clouds = await prisma.cloud.findMany();
+    const nbClouds = await prisma.cloud.count();
+
+    res.setHeader('X-Total-Count', nbClouds.toString());
+    res.setHeader('Cache-Control', 'public, max-age=100');
+    res.json(clouds);
+  } catch (error) {
+    res.status(400).json({ error: 'Erreur lors de la récupération' });
+  }
+};
+
+export const getFilteredClouds = async (req: Request, res: Response) => {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
+    //@ts-ignore
+    // console.log(req.user);
     const clouds = await prisma.cloud.findMany({
       where: {
         NOT: {
-          // @ts-ignore
-          userId: req.user?.id || '',
+          //@ts-ignore
+          userId: req.user?.id || '', // pas à moi
         },
+        guesses: {
+          none: {
+            //@ts-ignore
+            userId: req.user?.id || '', // pas déjà deviné
+          }
+        }
       },
-      take: limit,
       skip: skip,
       orderBy: { createdAt: 'desc' },
       select: {
@@ -63,9 +84,8 @@ export const getAllClouds = async (req: Request, res: Response) => {
       },
     });
 
-    const nbClouds = await prisma.cloud.count();
+    const nbClouds = clouds.length;
 
-    // Save data to Redis cache
     res.setHeader('X-Total-Count', nbClouds.toString());
     res.setHeader('Cache-Control', 'public, max-age=100');
     res.json(clouds);
@@ -79,11 +99,11 @@ export const getCloudsByUserId = async (req: Request, res: Response) => {
     const clouds = await prisma.cloud.findMany({
       where: {
         // @ts-ignore
-        userId: req.user?.id || '',
+        userId: req.params.id,
       },
       orderBy: { createdAt: 'desc' },
     });
-    res.json(clouds);
+    console.log(clouds);
   } catch (error) {
     res.status(400).json({ error: 'Erreur lors de la récupération' });
   }
